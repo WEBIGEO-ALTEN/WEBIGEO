@@ -1,7 +1,7 @@
 pipeline {
     environment {
         DOCKER_ID = "webigeo"
-        DOCKER_IMAGE = "webigeo/my-sqlite-image"
+        DOCKER_IMAGE = "my-sqlite-image"
         DOCKER_TAG = "latest"
         KUBECONFIG = credentials("config") 
     }
