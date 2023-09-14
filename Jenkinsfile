@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG .
+                    docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG -f sqlite-docker-image/Dockerfile .
                     """
                 }
             }
