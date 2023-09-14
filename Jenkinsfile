@@ -43,7 +43,7 @@ pipeline {
                 script {
                     sh """
                     #cp sqlite-deployment-dev.yaml sqlite-deployment.yaml
-                    kubectl apply -f sqlite-deployment.yaml --namespace=webigeo --kubeconfig=$KUBECONFIG
+                    kubectl apply -f sqlite-statefulset.yaml --namespace=webigeo --kubeconfig=$KUBECONFIG
                     """
                 }
             }
