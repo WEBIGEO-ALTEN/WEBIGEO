@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sqlite-service
+  namespace: webigeo
+spec:
+  selector:
+    statefulset.kubernetes.io/pod-name: sqlite-statefulset-0
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: NodePort

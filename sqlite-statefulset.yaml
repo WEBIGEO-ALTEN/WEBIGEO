@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: sqlite-statefulset
+  namespace: webigeo
+spec:
+  serviceName: sqlite-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sqlite
+  template:
+    metadata:
+      labels:
+        app: sqlite
+    spec:
+      containers:
+        - name: sqlite-container
+          image: webigeo/my-sqlite-image:latest 
+          ports:
+            - containerPort: 8000  # SQLite port
+          volumeMounts:
+            - name: sqlite-data
+              mountPath: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: sqlite-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
