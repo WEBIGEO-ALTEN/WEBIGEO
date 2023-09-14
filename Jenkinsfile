@@ -32,7 +32,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    #For the moments the ports are not open
+                    #For the moments the ports are not open and this is the test 
                     """
                 }
             }
