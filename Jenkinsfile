@@ -22,6 +22,7 @@ pipeline {
             steps {
                 script {
                     sh """
+                    echo "good"
                     #docker stop sqlite-container
                     #docker rm sqlite-container
                     #docker rmi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
