@@ -43,7 +43,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    #For the moments the ports are not open and this is the test 
+                    #For the moments the project is running on other kubernetes  
                     """
                 }
             }
