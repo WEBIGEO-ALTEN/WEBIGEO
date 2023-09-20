@@ -4,12 +4,14 @@ metadata:
   name: app-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: traefik
   tls:
     - secretName: app-secret
       hosts:
         - webigeo.dcpepper.cloudns.ph
+        - api.webigeo.dcpepper.cloudns.ph
   rules:
   - host: webigeo.dcpepper.cloudns.ph
     http:
