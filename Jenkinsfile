@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG_TEST -f sqlite-docker-image/Dockerfile .
+                    docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG_TEST -f sqlite-docker-image/Dockerfile.sqlite .
                     """
                 }
             }
@@ -50,7 +50,7 @@ pipeline {
 
                 script {
                 sh '''
-                docker login -u $DOCKER_ID -p yP?5Q>Ktp+YA%#_
+                docker login -u $DOCKER_ID -p $DOCKER_PASS
                 docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG_TEST
                 '''
                 }
