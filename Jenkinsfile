@@ -4,7 +4,7 @@ pipeline {
         DOCKER_IMAGE = "my-sqlite-image"
         DOCKER_TAG_TEST = "latest"
         KUBECONFIG = credentials("config") 
-        
+
     }
     agent any
 
@@ -34,7 +34,8 @@ pipeline {
             steps {
                 script {
                     sh """
-                    docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG_TEST -f sqlite-docker-image/Dockerfile.sqlite .
+                    echo "docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG_TEST -f sqlite-docker-image/Dockerfile ."
+                    docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG_TEST -f sqlite-docker-image/Dockerfile .
                     """
                 }
             }
