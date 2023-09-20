@@ -53,7 +53,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    kubectl apply -f statefulset-sqlite.yml service-sqlite.yml deployment-react.yml service-react.yml app-ingress.yml --namespace=test --kubeconfig=$KUBECONFIG
+                    kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-ingress.yml --namespace=test --kubeconfig=$KUBECONFIG
                     """
                 }
             }
