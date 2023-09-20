@@ -41,11 +41,18 @@ pipeline {
         }
 
         stage('Pushing the image into DockerHub') {
+            environment
+            {
+                DOCKER_PASS = credentials("DOCKER_HUB_PASS") 
+            }
+
             steps {
+
                 script {
-                    docker.withRegistry('https://hub.docker.com/',DOCKERCONFIG){
-                        dockerImage.push("test")
-                    }
+                sh '''
+                docker login -u $DOCKER_ID -p $DOCKER_PASS
+                docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG_TEST
+                '''
                 }
             }
         }
