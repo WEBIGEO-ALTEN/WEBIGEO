@@ -2,9 +2,9 @@ pipeline {
     environment {
         DOCKER_ID = "webigeo"
         DOCKER_IMAGE = "my-sqlite-image"
-        DOCKER_TAG_TEST = "test"
+        DOCKER_TAG_TEST = "latest"
         KUBECONFIG = credentials("config") 
-        DOCKERCONFIG = credentials("DOCKER_HUB_PASS")
+        
     }
     agent any
 
