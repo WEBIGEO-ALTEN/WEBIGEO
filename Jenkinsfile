@@ -61,16 +61,11 @@ pipeline {
         stage('Testing the kubernetes serives') {
             steps {
                 script {
-                      
                     final String url = "https://api.webigeo.dcpepper.cloudns.ph/"
-                    sleep(90)
-                    final def (String response,int code) = sh(script: "curl -s -w '\\n%{response_code}' $url", returnStdout: true).trim().tokenize("\n")
+                    sleep(10)
+                    final String response = sh(script: "curl -s -w '\\n%{response_code}' $url", returnStdout: true).trim()
 
-                    echo "HTTP response status code: $code"
-
-                    if (code == 200){
-                    echo response
-                    }
+                    echo "HTTP response status code: $responce"
 
                 }
             }
