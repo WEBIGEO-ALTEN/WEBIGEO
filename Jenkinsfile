@@ -25,7 +25,7 @@ pipeline {
                     echo "good"
                     #docker stop sqlite-container
                     #docker rm sqlite-container
-                    #docker rmi $DOCKER_ID/$DOCKER_IMAGE:latest
+                    docker rmi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG_TEST
                     """
                 }
             }
