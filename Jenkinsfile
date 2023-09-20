@@ -63,6 +63,7 @@ pipeline {
                 script {
                       
                     final String url = "https://api.webigeo.dcpepper.cloudns.ph/"
+                    sleep(90)
                     final def (String response,int code) = sh(script: "curl -s -w '\\n%{response_code}' $url", returnStdout: true).trim().tokenize("\n")
 
                     echo "HTTP response status code: $code"
