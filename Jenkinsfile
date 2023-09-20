@@ -8,6 +8,15 @@ pipeline {
     agent any
 
     stages {
+        stage('Clean Up the kubernetes namespace test') {
+            steps {
+                script {
+                    sh """
+                    kubectl delete all --all -n test
+                    """
+                }
+            }
+        }
         stage('Clean Up Docker') {
             steps {
                 script {
