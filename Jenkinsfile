@@ -69,6 +69,8 @@ pipeline {
                         echo "HTTP request to $url was successful"
                     } else {
                         error "HTTP request to $url failed with status code $response"
+                    }
+                }    
             }
         }
     }
