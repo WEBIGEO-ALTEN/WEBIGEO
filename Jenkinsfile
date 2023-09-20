@@ -58,19 +58,19 @@ pipeline {
             }
         }
 
-        stage('Testing the kubernetes serives') {
+        stage('Testing the Kubernetes services') {
             steps {
                 script {
-                    sh """
-                    curl -i https://api.webigeo.dcpepper.cloudns.ph/
-                    #final String url = "https://api.webigeo.dcpepper.cloudns.ph/"
-
-                    #final String response = sh(script: "curl -s $url", returnStdout: true).trim()
-
-                    #echo "HTTP response status code: $responce"
-                    """
-                }
+                    def url = "https://api.webigeo.dcpepper.cloudns.ph/"
+            
+                    def response = sh(script: "curl -s $url", returnStatus: true)
+            
+                    if (response == 0) {
+                        echo "HTTP request to $url was successful"
+                    } else {
+                        error "HTTP request to $url failed with status code $response"
             }
         }
     }
 }
+
