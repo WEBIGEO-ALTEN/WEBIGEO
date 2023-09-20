@@ -2,8 +2,9 @@ pipeline {
     environment {
         DOCKER_ID = "webigeo"
         DOCKER_IMAGE = "my-sqlite-image"
-        DOCKER_TAG = "latest"
+        DOCKER_TAG_TEST = "test"
         KUBECONFIG = credentials("config") 
+        DOCKERCONFIG = credentials("DOCKER_HUB_PASS")
     }
     agent any
 
@@ -21,9 +22,9 @@ pipeline {
             steps {
                 script {
                     sh """
-                    #docker stop sqlite-container
-                    #docker rm sqlite-container
-                    #docker rmi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+                    docker stop sqlite-container
+                    docker rm sqlite-container
+                    docker rmi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
                     """
                 }
             }
@@ -32,18 +33,18 @@ pipeline {
             steps {
                 script {
                     sh """
-                    docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG -f sqlite-docker-image/Dockerfile .
+                    docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG_TEST -f sqlite-docker-image/Dockerfile .
                     """
                 }
             }
         }
 
-        stage('Docker Run SQLite') {
+        stage('Pushing the image into DockerHub') {
             steps {
                 script {
-                    sh """
-                    docker run -d -p 8000:8000 --name sqlite-container $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
-                    """
+                    docker.withRegistry('https://hub.docker.com/',DOCKERCONFIG){
+                        dockerImage.push("test")
+                    }
                 }
             }
         }
