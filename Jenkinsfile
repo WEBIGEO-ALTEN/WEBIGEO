@@ -8,6 +8,17 @@ pipeline {
     agent any
 
     stages {
+        stage('Clean Up Docker') {
+            steps {
+                script {
+                    sh """
+                    docker stop sqlite-container
+                    docker rm sqlite-container
+                    docker rmi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+                    """
+                }
+            }
+        }
         stage('Docker Build') {
             steps {
                 script {
