@@ -24,13 +24,13 @@ pipeline {
             steps {
                 script {
                     sh """
-                    
+
                     #docker stop sqlite-container
                     #docker rm sqlite-container
                     #echo "docker rmi $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST"
                     #echo "docker rmi $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST"
-                    #docker rmi $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST
-                    #docker rmi $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST
+                    docker rmi $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST
+                    docker rmi $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST
                     """
                 }
             }
@@ -71,7 +71,7 @@ pipeline {
                 echo "docker login -u $DOCKER_ID -p $DOCKER_PASS"
                 docker login -u $DOCKER_ID -p "yP?5Q>Ktp+YA%#_"
                 docker push $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST
-                docker push $DCOKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST
+                docker push $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST
                 '''
                 }
             }
