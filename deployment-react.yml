@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: node
-        image: webigeo/my-react
+        image: webigeo/my-react:test
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
