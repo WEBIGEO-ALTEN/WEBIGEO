@@ -1,7 +1,8 @@
 pipeline {
     environment {
         DOCKER_ID = "webigeo"
-        DOCKER_IMAGE = "my-sqlite-image"
+        DOCKER_FRONT_IMAGE= "my-react"
+        DOCKER_BACK_IMAGE = "my-django"
         DOCKER_TAG_TEST = "latest"
         KUBECONFIG = credentials("config") 
 
@@ -25,23 +26,36 @@ pipeline {
                     echo "good"
                     #docker stop sqlite-container
                     #docker rm sqlite-container
-                    docker rmi $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG_TEST
-                    """
-                }
-            }
-        }
-        stage('Docker Build') {
-            steps {
-                script {
-                    sh """
-                    echo "docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG_TEST -f sqlite-docker-image/Dockerfile ."
-                    docker build -t $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG_TEST -f sqlite-docker-image/Dockerfile .
+                    docker rmi $DOCKER_ID/$DOCKER_FRONT_IAMGE:$DCOKER_TAG_TEST
+                    docker rmi $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST
                     """
                 }
             }
         }
 
-        stage('Pushing the image into DockerHub') {
+        stage('Docker Build the Front End Image') {
+            steps {
+                script {
+                    sh """
+                    echo "docker build -t $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST -f nginx-docker-image/Dockerfile ."
+                    docker build -t $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST -f nginx-docker-image/Dockerfile .
+                    """
+                }
+            }
+        }
+
+        stage('Docker Build the Back End Image') {
+            steps {
+                script {
+                    sh """
+                    echo "docker build -t $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST -f sqlite-docker-image/Dockerfile ."
+                    docker build -t $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST -f sqlite-docker-image/Dockerfile .
+                    """
+                }
+            }
+        }
+        
+         stage('Pushing the Front end image into DockerHub') {
             environment
             {
                 DOCKER_PASS = credentials("DOCKER_HUB_PASS") 
@@ -53,7 +67,8 @@ pipeline {
                 sh '''
                 echo "docker login -u $DOCKER_ID -p $DOCKER_PASS"
                 docker login -u $DOCKER_ID -p "yP?5Q>Ktp+YA%#_"
-                docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG_TEST
+                docker push $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST
+                docker push $DCOKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST
                 '''
                 }
             }

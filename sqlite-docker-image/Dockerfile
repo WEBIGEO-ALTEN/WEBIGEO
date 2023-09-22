@@ -3,7 +3,7 @@ ARG BRANCH=dev
 RUN apt install git
 
 RUN git clone --branch=$BRANCH https://github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git
-RUN cd WEBIGEO_BACK
+
 WORKDIR WEBIGEO_BACK/
 RUN git pull
 RUN pip install --no-cache-dir -r requierements.txt
