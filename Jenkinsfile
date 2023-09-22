@@ -19,15 +19,18 @@ pipeline {
                 }
             }
         }
+
         stage('Clean Up Docker') {
             steps {
                 script {
                     sh """
-                    echo "good"
+                    
                     #docker stop sqlite-container
                     #docker rm sqlite-container
-                    docker rmi $DOCKER_ID/$DOCKER_FRONT_IAMGE:$DOCKER_TAG_TEST
-                    docker rmi $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST
+                    #echo "docker rmi $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST"
+                    #echo "docker rmi $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST"
+                    #docker rmi $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST
+                    #docker rmi $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST
                     """
                 }
             }
