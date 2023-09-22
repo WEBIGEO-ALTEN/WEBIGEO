@@ -3,7 +3,7 @@ pipeline {
         DOCKER_ID = "webigeo"
         DOCKER_FRONT_IMAGE= "my-react"
         DOCKER_BACK_IMAGE = "my-django"
-        DOCKER_TAG_TEST = "latest"
+        DOCKER_TAG_TEST = "test"
         KUBECONFIG = credentials("config") 
 
     }
@@ -19,7 +19,7 @@ pipeline {
                 }
             }
         }
-
+git 
         stage('Clean Up Docker') {
             steps {
                 script {
@@ -29,8 +29,8 @@ pipeline {
                     #docker rm sqlite-container
                     #echo "docker rmi $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST"
                     #echo "docker rmi $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST"
-                    docker rmi $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST
-                    docker rmi $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST
+                    docker rmi $DOCKER_ID/$DOCKER_FRONT_IMAGE:latest
+                    docker rmi $DOCKER_ID/$DOCKER_BACK_IMAGE:latest
                     """
                 }
             }
@@ -41,7 +41,7 @@ pipeline {
                 script {
                     sh """
                     echo "docker build -t $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST -f nginx-docker-image/Dockerfile ."
-                    docker build -t $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST -f nginx-docker-image/Dockerfile .
+                    docker build -t $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST -f nginx-docker-image/Dockerfile . --no-cache
                     """
                 }
             }
@@ -52,7 +52,7 @@ pipeline {
                 script {
                     sh """
                     echo "docker build -t $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST -f sqlite-docker-image/Dockerfile ."
-                    docker build -t $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST -f sqlite-docker-image/Dockerfile .
+                    docker build -t $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST -f sqlite-docker-image/Dockerfile . --no-cache
                     """
                 }
             }
