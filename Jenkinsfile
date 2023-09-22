@@ -19,7 +19,7 @@ pipeline {
                 }
             }
         }
-git 
+
         stage('Clean Up Docker') {
             steps {
                 script {
