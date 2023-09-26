@@ -95,7 +95,7 @@ pipeline {
             }
         }
 
-        stage('Deployment in webigeo') {
+        stage('Deployment_in_webigeo') {
             steps {
                 script {
                     sh """
@@ -105,7 +105,7 @@ pipeline {
             }
         }
 
-        stage('Testing the Kubernetes services') {
+        stage('Testing_the_Kubernetes_services') {
             steps {
                 script {
                     def url = "https://api.webigeo.dcpepper.cloudns.ph/"
