@@ -95,7 +95,7 @@ pipeline {
             }
         }
 
-        stage('Deployment in webigeo') {
+        stage('CD Deployment webigeo in test') {
             steps {
                 script {
                     sh """
@@ -122,7 +122,7 @@ pipeline {
             }
         }
 
-        stage('Manual Approval') {
+        stage('CD Deployment in Prod (Manually)') {
             steps {
                 script {
                     // Input step to pause the pipeline and wait for approval
@@ -135,7 +135,7 @@ pipeline {
                     )
 
                     if (userInput['APPROVE'] == true) {
-                        echo 'Approved! Proceeding with the next steps.'
+                        sh """kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=test --kubeconfig=${KUBECONFIG}"""
                     } else {
                         error('Approval not granted. Aborting the pipeline.')
                     }
