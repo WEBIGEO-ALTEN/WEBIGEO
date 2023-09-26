@@ -123,25 +123,16 @@ pipeline {
         }
 
         stage('CD Deployment in Prod (Manually)') {
-            steps {
-                script {
-            // Input step to pause the pipeline and wait for approval
-                    def userInput = input(
-                        id: 'manualInput',
-                        message: 'Do you want to proceed?',
-                        parameters: [
-                        booleanParam(defaultValue: false, description: 'Approve to proceed', name: 'APPROVE')
-                        ]
-                    )
-
-            // Use dot notation to access the APPROVE parameter
-                    if (userInput.APPROVE == true) {
-                        sh """kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=prod --kubeconfig=${KUBECONFIG}"""
-                    } else {
-                    error('Approval not granted. Aborting the pipeline.')
+             steps {
+            // Create an Approval Button with a timeout of 15minutes.
+            // this require a manuel validation in order to deploy on production environment
+                    timeout(time: 15, unit: "MINUTES") {
+                        input message: 'Do you want to deploy in production ?', ok: 'Yes'
                     }
+                script { 
+                    sh """kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=prod --kubeconfig=${KUBECONFIG}"""
                 }
-            }
+            
         }
 
     }
