@@ -1,0 +1,7 @@
+imageBack: webigeo/my-django:latest
+imageFront: webigeo/my-react:latest
+
+DNS: webigeo.dcpepper.cloudns.ph
+API_DNS: api.webigeo.dcpepper.cloudns.ph
+
+mount: prod
