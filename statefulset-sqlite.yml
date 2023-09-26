@@ -5,10 +5,11 @@ metadata:
   labels:
     app: django
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: django
+  
   template:
     metadata:
       labels:
@@ -16,7 +17,19 @@ spec:
     spec:
       containers:
       - name: django
-        image: webigeo/my-django
+        image: webigeo/my-django:test
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
+        volumeMounts:
+          - name: mnt
+            mountPath: /mnt/data/
+        lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "ls db.sqlite3 || mv db.sqlite3.bak db.sqlite3"]
+      volumes:
+        - name: mnt
+          persistentVolumeClaim:
+            claimName: pvc-webigeo
+

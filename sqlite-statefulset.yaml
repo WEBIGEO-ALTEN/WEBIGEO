@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: sqlite-container
-          image: webigeo/my-sqlite-image:latest 
+          image: webigeo/my-sqlite-image:test 
           ports:
             - containerPort: 8000  # SQLite port
           volumeMounts:
