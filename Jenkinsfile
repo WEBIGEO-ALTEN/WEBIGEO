@@ -132,7 +132,7 @@ pipeline {
                 script { 
                     sh """kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=prod --kubeconfig=${KUBECONFIG}"""
                 }
-            
+            }
         }
 
     }
