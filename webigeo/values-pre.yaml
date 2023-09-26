@@ -1,0 +1,7 @@
+imageFront: webigeo/my-react:pre
+imageBack: webigeo/my-django:pre
+
+DNS: webigeo-pre.dcpepper.cloudns.ph
+API_DNS: api.webigeo-pre.dcpepper.cloudns.ph
+
+mount: pre
