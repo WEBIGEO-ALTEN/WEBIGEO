@@ -36,7 +36,7 @@ pipeline {
             }
         }
 
-        stage('Docker_Build_Front_End_Image') {
+        stage('Docker Build Front End Image') {
             steps {
                 script {
                     sh """
@@ -48,7 +48,7 @@ pipeline {
             }
         }
 
-        stage('Docker_Build_Back_End_Image') {
+        stage('Docker Build Back End Image') {
             steps {
                 script {
                     sh """
@@ -59,7 +59,7 @@ pipeline {
             }
         }
         
-        stage('Pushing_the_Front_End_image_to_DockerHub') {
+        stage('Pushing Front End image to DockerHub') {
             environment
             {
                 DOCKER_PASS = credentials("DOCKER_HUB_PASS") 
@@ -77,7 +77,7 @@ pipeline {
             }
         }
 
-        stage('Pushing_the_Back_End_image_to_DockerHub') {
+        stage('Pushing Back End image to DockerHub') {
             environment
             {
                 DOCKER_PASS = credentials("DOCKER_HUB_PASS") 
@@ -95,18 +95,18 @@ pipeline {
             }
         }
 
-        stage('Deployment_in_webigeo') {
+        stage('Deployment in webigeo') {
             steps {
                 script {
                     sh """
-                    helm install webigeo-pre ./webigeo values=values-pre.yaml -n pre --kubeconfig=$KUBECONFIG
+                    helm install webigeo-pre ./webigeo values=values-pre.yaml -n pre 
                     #kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=test --kubeconfig=$KUBECONFIG
                     """
                 }
             }
         }
 
-        stage('Testing_the_Kubernetes_services') {
+        stage('Testing Kubernetes services') {
             steps {
                 script {
                     def url = "https://api.webigeo.dcpepper.cloudns.ph/"
@@ -119,6 +119,27 @@ pipeline {
                         error "HTTP request to $url failed with status code $response"
                     }
                 }    
+            }
+        }
+
+        stage('Manual Approval') {
+            steps {
+                script {
+                    // Input step to pause the pipeline and wait for approval
+                    def userInput = input(
+                        id: 'manualInput',
+                        message: 'Do you want to proceed?',
+                        parameters: [
+                            booleanParam(defaultValue: false, description: 'Approve to proceed', name: 'APPROVE')
+                        ]
+                    )
+
+                    if (userInput['APPROVE'] == true) {
+                        echo 'Approved! Proceeding with the next steps.'
+                    } else {
+                        error('Approval not granted. Aborting the pipeline.')
+                    }
+                }
             }
         }
     }
