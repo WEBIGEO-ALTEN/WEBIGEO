@@ -36,7 +36,7 @@ pipeline {
             }
         }
 
-        stage('Docker Build the Front End Image') {
+        stage('Docker_Build_Front_End_Image') {
             steps {
                 script {
                     sh """
@@ -48,7 +48,7 @@ pipeline {
             }
         }
 
-        stage('Docker Build the Back End Image') {
+        stage('Docker_Build_Back_End_Image') {
             steps {
                 script {
                     sh """
@@ -59,7 +59,7 @@ pipeline {
             }
         }
         
-         stage('Pushing the Front end image into DockerHub') {
+        stage('Pushing_the_Front_End_image_to_DockerHub') {
             environment
             {
                 DOCKER_PASS = credentials("DOCKER_HUB_PASS") 
@@ -72,6 +72,23 @@ pipeline {
                 echo "docker login -u $DOCKER_ID -p $DOCKER_PASS"
                 docker login -u $DOCKER_ID -p "yP?5Q>Ktp+YA%#_"
                 docker push $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST
+                '''
+                }
+            }
+        }
+
+        stage('Pushing_the_Back_End_image_to_DockerHub') {
+            environment
+            {
+                DOCKER_PASS = credentials("DOCKER_HUB_PASS") 
+            }
+
+            steps {
+
+                script {
+                sh '''
+                echo "docker login -u $DOCKER_ID -p $DOCKER_PASS"
+                docker login -u $DOCKER_ID -p "yP?5Q>Ktp+YA%#_"
                 docker push $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST
                 '''
                 }

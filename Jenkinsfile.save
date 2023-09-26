@@ -24,7 +24,7 @@ pipeline {
             steps {
                 script {
                     sh """
-
+                    
                     #docker stop sqlite-container
                     #docker rm sqlite-container
                     #echo "docker rmi $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST"
