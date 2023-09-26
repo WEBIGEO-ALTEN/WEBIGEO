@@ -99,9 +99,9 @@ pipeline {
             steps {
                 script {
                     sh """
-                    helm install webigeo-pre ./webigeo values=values-pre.yaml -n pre 
+                    #helm install webigeo-pre ./webigeo -f values-pre.yaml -n pre 
+                    kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=test --kubeconfig=${KUBECONFIG}
                     """
-                    //kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=test --kubeconfig=$KUBECONFIG
                 }
             }
         }
