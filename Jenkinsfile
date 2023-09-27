@@ -36,7 +36,7 @@ pipeline {
             }
         }
 
-        stage('Docker Build the Front End Image') {
+        stage('Docker Build Front End Image') {
             steps {
                 script {
                     sh """
@@ -48,7 +48,7 @@ pipeline {
             }
         }
 
-        stage('Docker Build the Back End Image') {
+        stage('Docker Build Back End Image') {
             steps {
                 script {
                     sh """
@@ -59,7 +59,7 @@ pipeline {
             }
         }
         
-         stage('Pushing the Front end image into DockerHub') {
+        stage('Pushing Front End image to DockerHub') {
             environment
             {
                 DOCKER_PASS = credentials("DOCKER_HUB_PASS") 
@@ -72,23 +72,41 @@ pipeline {
                 echo "docker login -u $DOCKER_ID -p $DOCKER_PASS"
                 docker login -u $DOCKER_ID -p "yP?5Q>Ktp+YA%#_"
                 docker push $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST
+                '''
+                }
+            }
+        }
+
+        stage('Pushing Back End image to DockerHub') {
+            environment
+            {
+                DOCKER_PASS = credentials("DOCKER_HUB_PASS") 
+            }
+
+            steps {
+
+                script {
+                sh '''
+                echo "docker login -u $DOCKER_ID -p $DOCKER_PASS"
+                docker login -u $DOCKER_ID -p "yP?5Q>Ktp+YA%#_"
                 docker push $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST
                 '''
                 }
             }
         }
 
-        stage('Deployment in webigeo') {
+        stage('CD Deployment webigeo in test') {
             steps {
                 script {
                     sh """
-                    kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=test --kubeconfig=$KUBECONFIG
+                    #helm install webigeo-pre ./webigeo -f values-pre.yaml -n pre 
+                    kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=test --kubeconfig=${KUBECONFIG}
                     """
                 }
             }
         }
 
-        stage('Testing the Kubernetes services') {
+        stage('Testing Kubernetes services') {
             steps {
                 script {
                     def url = "https://api.webigeo.dcpepper.cloudns.ph/"
@@ -103,6 +121,20 @@ pipeline {
                 }    
             }
         }
+
+        stage('CD Deployment in Prod (Manually)') {
+             steps {
+            // Create an Approval Button with a timeout of 15minutes.
+            // this require a manuel validation in order to deploy on production environment
+                    timeout(time: 15, unit: "MINUTES") {
+                        input message: 'Do you want to deploy in production ?', ok: 'Yes'
+                    }
+                script { 
+                    sh """kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=prod --kubeconfig=${KUBECONFIG}"""
+                }
+            }
+        }
+
     }
 }
 
