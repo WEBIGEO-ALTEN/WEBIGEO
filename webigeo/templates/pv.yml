@@ -9,4 +9,4 @@ spec:
     - ReadWriteOnce
   hostPath:
     path: "/mnt/data/{{ .Values.mount }}"
-  storageClassName: local-storage
+  storageClassName: local-storage-{{ .Values.mount }}
