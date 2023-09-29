@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: app-ingress
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/cluster-issuer: letsencrypt-{{.Values.mount}}
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: traefik
@@ -11,7 +11,7 @@ spec:
     - secretName: app-secret
       hosts:
         - {{ .Values.DNS }}
-        - {{ .Values.API_DNS}}
+        # - {{ .Values.API_DNS}}
   rules:
   - host: {{ .Values.DNS }}
     http:
