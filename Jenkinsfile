@@ -98,9 +98,10 @@ pipeline {
         stage('CD Deployment webigeo in test') {
             steps {
                 script {
+                    git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
                     sh """
-                    #helm install webigeo-pre ./webigeo -f values-pre.yaml -n pre 
-                    kubectl apply -f pv.yml,pvc.yml,statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=test --kubeconfig=${KUBECONFIG}
+                    helm upgrade kubweb webigeo/ --values=webigeo/values-pre.yaml -n pre || helm install kubweb webigeo/ --values=webigeo/values-pre.yaml -n pre --create-namespace 
+                    #kubectl apply -f pv.yml,pvc.yml,statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=test --kubeconfig=${KUBECONFIG}
                     """
                 }
             }
@@ -130,7 +131,10 @@ pipeline {
                         input message: 'Do you want to deploy in production ?', ok: 'Yes'
                     }
                 script { 
-                    sh """kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=prod --kubeconfig=${KUBECONFIG}"""
+                    sh """
+                    #helm upgrade kubweb webigeo/ --values=webigeo/values-prod.yaml -n prod || helm install kubweb webigeo/ --values=webigeo/values-prod.yaml -n prod --create-namespace
+                    #kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=prod --kubeconfig=${KUBECONFIG}
+                    """
                 }
             }
         }
