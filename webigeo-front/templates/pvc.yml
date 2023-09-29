@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-webigeo-{{ .Values.mount }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-storage-{{ .Values.mount }}
+  resources:
+    requests:
+      storage: 128Mi
