@@ -7,7 +7,9 @@ pipeline {
         KUBECONFIG = credentials("config") 
 
     }
-    agent any
+    agent {
+        label 'Front_End'
+    }
 
     stages {
         stage('Clean Up the kubernetes namespace test') {
