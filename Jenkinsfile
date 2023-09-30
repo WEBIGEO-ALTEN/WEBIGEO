@@ -37,7 +37,7 @@ pipeline {
                 }
             }
         }
-
+        /*/
         stage('Docker Build Front End Image') {
             steps {
                 script {
@@ -49,7 +49,7 @@ pipeline {
                 }
             }
         }
-
+        /*/
         stage('Docker Build Back End Image') {
             steps {
                 script {
@@ -60,7 +60,7 @@ pipeline {
                 }
             }
         }
-        
+        /*/
         stage('Pushing Front End image to DockerHub') {
             environment
             {
@@ -78,7 +78,7 @@ pipeline {
                 }
             }
         }
-
+        /*/
         stage('Pushing Back End image to DockerHub') {
             environment
             {
