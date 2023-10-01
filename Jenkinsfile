@@ -114,11 +114,15 @@ pipeline {
             agent {
                 label 'Back_End'
             }
+            environment {
+                KUBECONFIG = credentials("config1")
+            }
             steps {
                 script {
                     git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
                     sh """
-                    helm upgrade kubweb webigeo-back/ --values=webigeo-back/values-pre.yaml -n pre || helm install kubweb webigeo-back/ --values=webigeo-back/values-pre.yaml -n pre 
+                    kubectl delete all --all -n pre
+                    helm upgrade webigeo-pre webigeo-back/ --values=webigeo-back/values-pre.yaml -n pre || helm install kubweb webigeo-back/ --values=webigeo-back/values-pre.yaml -n pre
                     #kubectl apply -f pv.yml,pvc.yml,statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=test --kubeconfig=${KUBECONFIG}
                     """
                 }
