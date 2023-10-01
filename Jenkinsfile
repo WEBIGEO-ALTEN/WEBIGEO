@@ -38,7 +38,7 @@ pipeline {
             }
         }
 
-        stage('Clean Up Docker') {
+        stage('Clean Up Docker_Front_End') {
             steps {
                 script {
                     sh """
@@ -53,7 +53,7 @@ pipeline {
             }
         }
 
-        stage('Clean Up Docker') {
+        stage('Clean Up Docker_Back_End') {
              agent {
                 label 'Back_End'
             }
