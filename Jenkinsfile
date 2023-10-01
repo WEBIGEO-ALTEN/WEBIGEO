@@ -3,7 +3,7 @@ pipeline {
         DOCKER_ID = "webigeo"
         DOCKER_FRONT_IMAGE= "my-react"
         DOCKER_BACK_IMAGE = "my-django"
-        DOCKER_TAG_TEST = "test"
+        DOCKER_TAG_TEST = "pre"
         KUBECONFIG = credentials("config") 
 
     }
@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    kubectl delete all --all -n test
+                    kubectl delete all --all -n pre
                     """
                 }
             }
@@ -49,7 +49,7 @@ pipeline {
                 }
             }
         }
-        /*/
+        
         stage('Docker Build Back End Image') {
             steps {
                 script {
@@ -60,7 +60,7 @@ pipeline {
                 }
             }
         }
-        /*/
+        
         stage('Pushing Front End image to DockerHub') {
             environment
             {
@@ -78,7 +78,7 @@ pipeline {
                 }
             }
         }
-        /*/
+        
         stage('Pushing Back End image to DockerHub') {
             environment
             {
@@ -96,13 +96,29 @@ pipeline {
                 }
             }
         }
-
-        stage('CD Deployment webigeo in test') {
+        /*/
+        
+        stage('CD Deployment webigeo_Front in pre') {
             steps {
                 script {
                     git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
                     sh """
                     helm upgrade kubweb webigeo-front/ --values=webigeo-front/values-pre.yaml -n pre || helm install kubweb webigeo-front/ --values=webigeo-front/values-pre.yaml -n pre --create-namespace 
+                    #kubectl apply -f pv.yml,pvc.yml,statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=test --kubeconfig=${KUBECONFIG}
+                    """
+                }
+            }
+        }
+        
+        stage('CD Deployment webigeo_Back in pre') {
+            agent {
+                label 'Back_End'
+            }
+            steps {
+                script {
+                    git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
+                    sh """
+                    helm upgrade kubweb webigeo-back/ --values=webigeo-back/values-pre.yaml -n pre || helm install kubweb webigeo-back/ --values=webigeo-back/values-pre.yaml -n pre 
                     #kubectl apply -f pv.yml,pvc.yml,statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=test --kubeconfig=${KUBECONFIG}
                     """
                 }
