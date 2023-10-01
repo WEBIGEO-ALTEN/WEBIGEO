@@ -108,7 +108,7 @@ pipeline {
             }
         }
         /*/
-        
+
         stage('CD Deployment webigeo_Front in pre') {
             steps {
                 script {
@@ -146,7 +146,7 @@ pipeline {
                     def url = "https://api.webigeo.dcpepper.cloudns.ph/"
             
                     def response = sh(script: "curl -s $url", returnStatus: true)
-            
+                    //echo "${responce}"
                     if (response == 0) {
                         echo "HTTP request to $url was successful"
                     } else {
