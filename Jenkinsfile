@@ -40,7 +40,7 @@ pipeline {
             }
         }
 
-        stage('Clean Up Docker_Front_End') {
+        stage('Clean Up Docker Front End') {
             steps {
                 script {
                     sh """
@@ -55,7 +55,7 @@ pipeline {
             }
         }
 
-        stage('Clean Up Docker_Back_End') {
+        stage('Clean Up Docker Back End') {
              agent {
                 label 'Back_End'
             }
@@ -111,7 +111,7 @@ pipeline {
         }
         /*/
 
-        stage('CD Deployment webigeo_Front in pre') {
+        stage('CD Deployment webigeo Front in pre') {
             steps {
                 script {
                     //git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
@@ -123,7 +123,7 @@ pipeline {
             }
         }
         
-        stage('CD Deployment webigeo_Back in pre') {
+        stage('CD Deployment webigeo Back in pre') {
             agent {
                 label 'Back_End'
             }
@@ -135,7 +135,7 @@ pipeline {
                     //git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
                     sh """
                     kubectl delete all --all -n pre
-                    helm upgrade webigeo-pre webigeo-back/ --values=webigeo-back/values-pre.yaml -n pre || helm install kubweb webigeo-back/ --values=webigeo-back/values-pre.yaml -n pre
+                    helm upgrade webigeo-pre webigeo-back/ --values=webigeo-back/values-pre.yaml -n pre || helm install webigeo-pre webigeo-back/ --values=webigeo-back/values-pre.yaml -n pre
                     #kubectl apply -f pv.yml,pvc.yml,statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=test --kubeconfig=${KUBECONFIG}
                     """
                 }
@@ -167,25 +167,25 @@ pipeline {
                     }
                 script { 
                     sh """
-                    #helm upgrade kubweb webigeo/ --values=webigeo/values-prod.yaml -n prod || helm install kubweb webigeo/ --values=webigeo/values-prod.yaml -n prod --create-namespace
+                    #helm upgrade kubweb webigeo/ --values=webigeo/values-prod.yaml -n prod || helm install kubweb1 webigeo/ --values=webigeo/values-prod.yaml -n prod --create-namespace
                     #kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=prod --kubeconfig=${KUBECONFIG}
                     """
                 }
             }
         }
 
-        stage('CD Deployment webigeo_Front in prod') {
+        stage('CD Deployment webigeo Front in prod') {
             steps {
                 script {
                     //git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
                     sh """
-                    helm upgrade kubweb1 webigeo-front/ --values=webigeo-front/values-prod.yaml -n prod || helm install kubweb webigeo-front/ --values=webigeo-front/values-prod.yaml -n prod --create-namespace
+                    helm upgrade kubweb1 webigeo-front/ --values=webigeo-front/values-prod.yaml -n prod || helm install kubweb1 webigeo-front/ --values=webigeo-front/values-prod.yaml -n prod --create-namespace
                     """
                 }
             }
         }
         
-        stage('CD Deployment webigeo_Back in prod') {
+        stage('CD Deployment webigeo Back in prod') {
             agent {
                 label 'Back_End'
             }
@@ -196,7 +196,7 @@ pipeline {
                 script {
                     //git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
                     sh """
-                    helm upgrade webigeo-prod webigeo-back/ --values=webigeo-back/values-prod.yaml -n prod || helm install kubweb webigeo-back/ --values=webigeo-back/values-prod.yaml -n prod
+                    helm upgrade webigeo-prod webigeo-back/ --values=webigeo-back/values-prod.yaml -n prod || helm install webigeo-prod webigeo-back/ --values=webigeo-back/values-prod.yaml -n prod
                     """
                 }
             }
