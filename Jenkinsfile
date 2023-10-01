@@ -122,7 +122,7 @@ pipeline {
                     git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
                     sh """
                     kubectl delete all --all -n pre
-                    helm upgrade kubweb webigeo-back/ --values=webigeo-back/values-pre.yaml -n pre || helm install kubweb webigeo-back/ --values=webigeo-back/values-pre.yaml -n pre --name=webigeo-pre
+                    helm upgrade webigeo-pre webigeo-back/ --values=webigeo-back/values-pre.yaml -n pre || helm install kubweb webigeo-back/ --values=webigeo-back/values-pre.yaml -n pre
                     #kubectl apply -f pv.yml,pvc.yml,statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=test --kubeconfig=${KUBECONFIG}
                     """
                 }
