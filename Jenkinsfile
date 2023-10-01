@@ -135,7 +135,7 @@ pipeline {
                     def url = "https://api.webigeo.dcpepper.cloudns.ph/"
             
                     def response = sh(script: "curl -s $url", returnStatus: true)
-                    echo "${responce}"
+                    //echo "${responce}"
                     if (response == 0) {
                         echo "HTTP request to $url was successful"
                     } else {
