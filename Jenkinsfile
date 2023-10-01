@@ -179,7 +179,7 @@ pipeline {
                 script {
                     //git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
                     sh """
-                    helm upgrade kubweb webigeo-front/ --values=webigeo-front/values-prod.yaml -n prod || helm install kubweb webigeo-front/ --values=webigeo-front/values-prod.yaml -n prod --create-namespace
+                    helm upgrade kubweb1 webigeo-front/ --values=webigeo-front/values-prod.yaml -n prod || helm install kubweb webigeo-front/ --values=webigeo-front/values-prod.yaml -n prod --create-namespace
                     """
                 }
             }
