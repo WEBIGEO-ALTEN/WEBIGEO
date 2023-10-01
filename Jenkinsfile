@@ -5,10 +5,7 @@ pipeline {
         DOCKER_BACK_IMAGE = "my-django"
         DOCKER_TAG_TEST = "pre"
         DOCKER_TAG_TEST_PROD = "prod"
-        KUBECONFIG = credentials("config") 
-        KUBECONFIG = credentials("config1")
-
-
+        KUBECONFIG = credentials("config")
     }
     agent {
         label 'Front_End'
@@ -29,6 +26,9 @@ pipeline {
         stage('Clean Up the kubernetes namespace prod') {
             agent {
                 label 'Back_End'
+            }
+            environment {
+                KUBECONFIG = credentials("config1")
             }
             steps {
                 script {
