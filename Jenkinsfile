@@ -6,6 +6,8 @@ pipeline {
         DOCKER_TAG_TEST = "pre"
         DOCKER_TAG_TEST_PROD = "prod"
         KUBECONFIG = credentials("config") 
+        KUBECONFIG = credentials("config1")
+
 
     }
     agent {
