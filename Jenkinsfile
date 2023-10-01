@@ -114,6 +114,9 @@ pipeline {
             agent {
                 label 'Back_End'
             }
+            environment {
+                KUBECONFIG = credentials("config1")
+            }
             steps {
                 script {
                     git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
