@@ -173,6 +173,7 @@ pipeline {
                     }
                 script {
                     if (env.BRANCH_NAME == 'dev') {
+                        echo "this enters into if statement"
                         def dir = sh(script: "pwd", returnStdout: true)
                         echo "the directory is: ${dir}"
                     } else {
