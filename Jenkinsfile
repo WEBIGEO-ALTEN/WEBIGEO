@@ -148,7 +148,7 @@ pipeline {
                     def url = "https://api.webigeo.dcpepper.cloudns.ph/"
             
                     def response = sh(script: "curl -s $url", returnStatus: true)
-                    //echo "${responce}"
+                    echo "${responce}"
                     if (response == 0) {
                         echo "HTTP request to $url was successful"
                     } else {
@@ -165,11 +165,12 @@ pipeline {
                     timeout(time: 15, unit: "MINUTES") {
                         input message: 'Do you want to deploy in production ?', ok: 'Yes'
                     }
-                script { 
-                    sh """
-                    #helm upgrade kubweb webigeo/ --values=webigeo/values-prod.yaml -n prod || helm install kubweb1 webigeo/ --values=webigeo/values-prod.yaml -n prod --create-namespace
-                    #kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=prod --kubeconfig=${KUBECONFIG}
-                    """
+                script {
+                    if (env.BRANCH_NAME == 'dev') 
+                    def dir = sh(script : 'pwd', returnStdout: true ) 
+                    else {
+
+                    }
                 }
             }
         }
