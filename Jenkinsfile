@@ -175,12 +175,12 @@ pipeline {
                         input message: 'Do you want to deploy in production ?', ok: 'Yes'
                     }
                 script {
-                    if (env.BRANCH_NAME == 'dev') 
-                        def dir = sh(script : "pwd", returnStdout: true )
-                        echo "the direct of :${dir}" 
-                    }else {
-                        error "Something is phispfy"
-                    }
+                    if (env.BRANCH_NAME == 'dev') {
+                        def dir = sh(script: "pwd", returnStdout: true)
+                        echo "the directory is: ${dir}"
+                    } else {
+                        error "Something is fishy"
+                        }
                 }
             }
         }
