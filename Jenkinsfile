@@ -173,13 +173,9 @@ pipeline {
                     }
                 script {
                     echo "Branch name is: ${env.BRANCH_NAME}"
-
-                    if (env.BRANCH_NAME == 'null') {
-                        echo "Triggering another pipeline job"
-                        build job: 'WEBIGEO_FRONT_PROD', parameters: [string(name: 'param1', value: "value1")], wait: true
-                    } else {
-                        error "Something is fishy"
-                        }
+                    echo "Triggering another pipeline job"
+                    build job: 'WEBIGEO_FRONT_PROD', parameters: [string(name: 'param1', value: "value1")], wait: true
+                    
                 }
             }
         }
