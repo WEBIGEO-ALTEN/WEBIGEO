@@ -174,7 +174,7 @@ pipeline {
                 script {
                     echo "Branch name is: ${env.BRANCH_NAME}"
 
-                    if (env.BRANCH_NAME == 'origin/master') {
+                    if (env.BRANCH_NAME == 'null') {
                         echo "this enters into if statement"
                         def dir = sh(script: "pwd", returnStdout: true)
                         echo "the directory is: ${dir}"
