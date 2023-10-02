@@ -147,7 +147,7 @@ pipeline {
                 script {
                     def url = "https://webigeo-pre.dcpepper.cloudns.ph/home"
             
-                    def response = sh(script: "curl -i $url", returnStdout: true)
+                    def response = sh(script: "curl -s $url", returnStdout: true)
                     echo "The ouput of the culr command :${responce}"
 
                     if (response.contains('200')) {
