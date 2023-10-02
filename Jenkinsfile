@@ -178,7 +178,7 @@ pipeline {
                     if (env.BRANCH_NAME == 'dev') 
                     def dir = sh(script : "pwd", returnStdout: true )
                     echo "the direct of :${dir}" 
-                    else {
+                    }else {
                         error "Something is phispfy"
                     }
                 }
