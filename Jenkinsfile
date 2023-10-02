@@ -147,10 +147,11 @@ pipeline {
                 script {
                     def url = "https://webigeo-pre.dcpepper.cloudns.ph/home"
             
-                    def response = sh(script: "curl -s -o /dev/null -w '%{http_code}' $url", returnStatus: true).trim()
+                    def response = sh(script: "curl -s -o /dev/null -w '%{http_code}' $url", returnStdout: true).trim()
 
                     response = response.toInteger()
-                    echo "The ouput of the culr command :${responce}"
+
+                    echo "The ouput of the curl command :${responce}"
 
                     if (response == 200) {
                         echo "HTTP request to $url was successful"
