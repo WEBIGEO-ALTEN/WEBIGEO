@@ -151,7 +151,7 @@ pipeline {
 
                     echo "The ouput of the culr command :${responce}"
 
-                    if (response == '200') {
+                    if (response == 200) {
                         echo "HTTP request to $url was successful"
                     } else {
                         error "HTTP request to $url failed with status code $response"
