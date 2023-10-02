@@ -12,10 +12,6 @@ spec:
       hosts:
         - {{ .Values.API_DNS}}
   rules:
-<<<<<<< HEAD:webigeo/templates/app-prod-ingress.yml
-=======
-  
->>>>>>> 4f3aefbaf848ae5c678d15ad509ef2edb374ec4c:webigeo-back/templates/app-prod-ingress.yml
   - host: {{ .Values.API_DNS}}
     http:
       paths:
