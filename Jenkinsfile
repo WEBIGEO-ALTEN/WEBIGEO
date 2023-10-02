@@ -176,7 +176,7 @@ pipeline {
 
                     if (env.BRANCH_NAME == 'null') {
                         echo "this enters into if statement"
-                        def dir = sh(script: "pwd", returnStdout: true)
+                        def dir = sh(script: "pwd", returnStdout: true).trim()
                         echo "the directory is: ${dir}"
                     } else {
                         error "Something is fishy"
