@@ -174,25 +174,8 @@ pipeline {
                 script {
                     echo "Branch name is: ${env.BRANCH_NAME}"
                     echo "Triggering another pipeline job"
+                    build job: 'WEBIGEO_BACK_PROD', parameters: [string(name: 'param1', value: "value1")], wait: true
                     build job: 'WEBIGEO_FRONT_PROD', parameters: [string(name: 'param1', value: "value1")], wait: true
-                    
-                }
-            }
-        }
-        
-        stage('CD Deployment webigeo Back in prod') {
-            agent {
-                label 'Back_End'
-            }
-            environment {
-                KUBECONFIG = credentials("config1")
-            }
-            steps {
-                script {
-                    //git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
-                    sh """
-                    helm upgrade webigeo-prod webigeo-back/ --values=webigeo-back/values-prod.yaml -n prod || helm install webigeo-prod webigeo-back/ --values=webigeo-back/values-prod.yaml -n prod
-                    """
                 }
             }
         }
