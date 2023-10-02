@@ -150,12 +150,12 @@ pipeline {
                     def response = ""
                         try {
                         // Execute the curl command and capture its output
-                        response = sh(script: "curl -s -o /dev/null -w '%{http_code}' $url", returnStatus: true).trim()
+                        response = sh(script: "curl -s -o /dev/null -w '%{http_code}' $url", returnStatus: true).toInteger()
                         } catch (Exception e) {
                         } catch (Exception e) {
                         error "Failed to execute curl command: ${e.getMessage()}"
                         }
-                    response = response.toInteger()
+                    //response = response.toInteger()
 
                     echo "The ouput of the curl command :${responce}"
 
@@ -177,7 +177,8 @@ pipeline {
                     }
                 script {
                     if (env.BRANCH_NAME == 'dev') 
-                    def dir = sh(script : 'pwd', returnStdout: true ) 
+                    def dir = sh(script : "pwd", returnStdout: true )
+                    echo "the direct of :${dir}" 
                     else {
 
                     }
