@@ -150,7 +150,7 @@ pipeline {
                     def response = ""
                         try {
                         // Execute the curl command and capture its output
-                        response = sh(script: "curl -s -o /dev/null -w '%{http_code}' $url", returnStatus: true).toInteger()
+                        response = sh(script: "curl -s -o /dev/null -w '%{http_code}' $url", returnStatus: true).toInt()
                         } catch (Exception e) {
                         error "Failed to execute curl command: ${e.getMessage()}"
                         }
