@@ -152,7 +152,6 @@ pipeline {
                         // Execute the curl command and capture its output
                         response = sh(script: "curl -s -o /dev/null -w '%{http_code}' $url", returnStatus: true).toInteger()
                         } catch (Exception e) {
-                        } catch (Exception e) {
                         error "Failed to execute curl command: ${e.getMessage()}"
                         }
                     //response = response.toInteger()
@@ -180,7 +179,7 @@ pipeline {
                     def dir = sh(script : "pwd", returnStdout: true )
                     echo "the direct of :${dir}" 
                     else {
-
+                        error "Something is phispfy"
                     }
                 }
             }
