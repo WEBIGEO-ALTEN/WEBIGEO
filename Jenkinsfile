@@ -149,19 +149,8 @@ pipeline {
             
                     def response = sh(script: "curl -s -o /dev/null -w '%{http_code}' $url", returnStatus: true).trim()
 
+                    response = response.toInteger()
                     echo "The ouput of the culr command :${responce}"
-                    
-                    if (response.isInteger()) {
-                        echo "Response is an integer."
-                    } else if (response.isFloat()) {
-                        echo "Response is a floating-point number."
-                    } else if (response.isBoolean()) {
-                        echo "Response is a boolean."
-                    } else if (response.isString()) {
-                        echo "Response is a string."
-                    } else {
-                        echo "Response data type is unknown."
-                    }
 
                     if (response == 200) {
                         echo "HTTP request to $url was successful"
