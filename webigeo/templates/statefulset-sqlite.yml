@@ -31,5 +31,5 @@ spec:
       volumes:
         - name: mnt
           persistentVolumeClaim:
-            claimName: pvc-webigeo
+            claimName: pvc-webigeo-{{ .Values.mount }}
 
