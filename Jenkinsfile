@@ -172,6 +172,94 @@ pipeline {
                         input message: 'Do you want to deploy in production ?', ok: 'Yes'
                     }
                 script {
+                    echo "Deploying in the Prod"
+                }
+            }
+        }
+
+        stage('Checkout Dev Branch for front') {
+            steps {
+                // Checkout the dev branch
+                script {
+                    checkout([$class: 'GitSCM', 
+                        branches: [[name: 'dev']], 
+                        doGenerateSubmoduleConfigurations: false, 
+                        extensions: [], 
+                        submoduleCfg: [], 
+                        userRemoteConfigs: [[url: 'https://github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git']]
+                    ])
+                }
+            }
+        }
+
+        stage('Merge Dev into Main for Front') {
+            steps {
+                // Navigate to the local main branch
+                sh 'git checkout main'
+                
+                // Merge the dev branch into main
+                sh 'git merge origin/dev'
+                
+                sh 'git config --global user.name goli-sateesh-6011'
+                sh 'git config --global user.email goli.sateesh@gmail.com'
+                
+                sh 'git config credential.helper "store --file=$HOME/.git-credentials"'
+
+                // Push the changes to the remote main branch
+                sh 'git push https://goli-sateesh-6011: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@github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git main'
+            }
+        }
+
+        stage('Checkout Dev Branch for back') {
+            agent {
+                label 'Back_End'
+            }
+            environment {
+                KUBECONFIG = credentials("config1")
+            }
+            steps {
+                // Checkout the dev branch
+                script {
+                    checkout([$class: 'GitSCM', 
+                        branches: [[name: 'dev']], 
+                        doGenerateSubmoduleConfigurations: false, 
+                        extensions: [], 
+                        submoduleCfg: [], 
+                        userRemoteConfigs: [[url: 'https://github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git']]
+                    ])
+                }
+            }
+        }
+
+        stage('Merge Dev into Main for back') {
+            agent {
+                label 'Back_End'
+            }
+            environment {
+                KUBECONFIG = credentials("config1")
+            }
+            steps {
+                // Navigate to the local main branch
+                sh 'git checkout main'
+                
+                // Merge the dev branch into main
+                sh 'git merge origin/dev'
+                
+                sh 'git config --global user.name goli-sateesh-6011'
+                sh 'git config --global user.email goli.sateesh@gmail.com'
+                
+                sh 'git config credential.helper "store --file=$HOME/.git-credentials"'
+
+                // Push the changes to the remote main branch
+                sh 'git push https://goli-sateesh-6011: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@github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git main'
+            }
+        }
+
+        stage('CD Deployment in Prod') {
+             steps {
+            // Create an Approval Button with a timeout of 15minutes.
+            // this require a manuel validation in order to deploy on production environment
+                script {
                     echo "Branch name is: ${env.BRANCH_NAME}"
                     echo "Triggering another pipeline job"
                     build job: 'WEBIGEO_BACK_PROD', parameters: [string(name: 'param1', value: "value1")], wait: true
@@ -179,6 +267,7 @@ pipeline {
                 }
             }
         }
+
     }
 }
 
