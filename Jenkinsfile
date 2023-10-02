@@ -172,7 +172,7 @@ pipeline {
                         input message: 'Do you want to deploy in production ?', ok: 'Yes'
                     }
                 script {
-                    if (env.BRANCH_NAME == 'dev') {
+                    if (env.BRANCH_NAME == 'master') {
                         echo "this enters into if statement"
                         def dir = sh(script: "pwd", returnStdout: true)
                         echo "the directory is: ${dir}"
