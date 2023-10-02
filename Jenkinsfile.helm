@@ -175,11 +175,21 @@ pipeline {
                     echo "Branch name is: ${env.BRANCH_NAME}"
 
                     if (env.BRANCH_NAME == 'null') {
-                        echo "Triggering another pipeline job"
-                        build job: 'WEBIGEO_FRONT_PROD', parameters: [string(name: 'param1', value: "value1")], wait: true
+                        echo "Everything works good"
                     } else {
                         error "Something is fishy"
                         }
+                }
+            }
+        }
+
+        stage('CD Deployment webigeo Front in prod') {
+            steps {
+                script {
+                    //git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
+                    sh """
+                    helm upgrade kubweb1 webigeo-front/ --values=webigeo-front/values-prod.yaml -n prod || helm install kubweb1 webigeo-front/ --values=webigeo-front/values-prod.yaml -n prod --create-namespace
+                    """
                 }
             }
         }
