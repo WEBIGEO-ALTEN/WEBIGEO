@@ -3,22 +3,24 @@ kind: Ingress
 metadata:
   name: app-ingress
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-{{ .Values.mount }} 
+    cert-manager.io/cluster-issuer: letsencrypt-{{.Values.mount}}
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: traefik
   tls:
     - secretName: app-secret
       hosts:
-        - {{ .Values.API_DNS}}
+        - {{ .Values.DNS }}
+        # - {{ .Values.API_DNS}}
   rules:
-  - host: {{ .Values.API_DNS}}
+  - host: {{ .Values.DNS }}
     http:
       paths:
         - path: /
           pathType: Prefix
           backend:
              service:
-              name: django-service
+              name: node-service
               port:
-                number: 8000
+                number: 3000
+  

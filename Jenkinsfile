@@ -3,62 +3,77 @@ pipeline {
         DOCKER_ID = "webigeo"
         DOCKER_FRONT_IMAGE= "my-react"
         DOCKER_BACK_IMAGE = "my-django"
-        DOCKER_TAG_TEST = "test"
-        KUBECONFIG = credentials("config") 
-
+        DOCKER_TAG_TEST = "pre"
+        DOCKER_TAG_TEST_PROD = "prod"
+        KUBECONFIG = credentials("config")
     }
-    agent any
+    agent {
+        label 'Front_End'
+    }
 
     stages {
-        stage('Clean Up the kubernetes namespace test') {
+        stage('Clean Up the kubernetes namespace pre & prod') {
             steps {
                 script {
                     sh """
-                    kubectl delete all --all -n test
+                    kubectl delete all --all -n pre
+                    kubectl delete all --all -n prod
                     """
                 }
             }
         }
 
-        stage('Clean Up Docker') {
+        stage('Clean Up the kubernetes namespace prod') {
+            agent {
+                label 'Back_End'
+            }
+            environment {
+                KUBECONFIG = credentials("config1")
+            }
             steps {
                 script {
                     sh """
+                    kubectl delete all --all -n pre
+                    kubectl delete all --all -n prod
+                    """
+                }
+            }
+        }
 
+        stage('Clean Up Docker Front End') {
+            steps {
+                script {
+                    sh """
                     #docker stop sqlite-container
                     #docker rm sqlite-container
                     #echo "docker rmi $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST"
                     #echo "docker rmi $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST"
-                    docker rmi $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST
-                    docker rmi $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST
+                    docker rmi $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST || true
+                    docker rmi $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST_PROD || true
                     """
                 }
             }
         }
 
-        stage('Docker Build Front End Image') {
+        stage('Clean Up Docker Back End') {
+             agent {
+                label 'Back_End'
+            }
             steps {
                 script {
                     sh """
-                    echo "test"
-                    echo "docker build -t $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST -f nginx-docker-image/Dockerfile ."
-                    docker build -t $DOCKER_ID/$DOCKER_FRONT_IMAGE:$DOCKER_TAG_TEST -f nginx-docker-image/Dockerfile . --no-cache
+                    #docker stop sqlite-container
+                    #docker rm sqlite-container
+                    #echo "docker rmi $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST"
+                    #echo "docker rmi $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST_PROD"
+                    docker rmi $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST || true
+                    docker rmi $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST_PROD || true
                     """
                 }
             }
         }
-
-        stage('Docker Build Back End Image') {
-            steps {
-                script {
-                    sh """
-                    echo "docker build -t $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST -f sqlite-docker-image/Dockerfile ."
-                    docker build -t $DOCKER_ID/$DOCKER_BACK_IMAGE:$DOCKER_TAG_TEST -f sqlite-docker-image/Dockerfile . --no-cache
-                    """
-                }
-            }
-        }
-        
+        /*/
+          
         stage('Pushing Front End image to DockerHub') {
             environment
             {
@@ -76,7 +91,7 @@ pipeline {
                 }
             }
         }
-
+        
         stage('Pushing Back End image to DockerHub') {
             environment
             {
@@ -94,13 +109,34 @@ pipeline {
                 }
             }
         }
+        /*/
 
-        stage('CD Deployment webigeo in test') {
+        stage('CD Deployment webigeo Front in pre') {
             steps {
                 script {
+                    //git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
                     sh """
-                    #helm install webigeo-pre ./webigeo -f values-pre.yaml -n pre 
-                    kubectl apply -f pv.yml,pvc.yml,statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=test --kubeconfig=${KUBECONFIG}
+                    helm upgrade kubweb webigeo-front/ --values=webigeo-front/values-pre.yaml -n pre || helm install kubweb webigeo-front/ --values=webigeo-front/values-pre.yaml -n pre --create-namespace 
+                    #kubectl apply -f pv.yml,pvc.yml,statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=test --kubeconfig=${KUBECONFIG}
+                    """
+                }
+            }
+        }
+        
+        stage('CD Deployment webigeo Back in pre') {
+            agent {
+                label 'Back_End'
+            }
+            environment {
+                KUBECONFIG = credentials("config1")
+            }
+            steps {
+                script {
+                    //git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
+                    sh """
+                    kubectl delete all --all -n pre
+                    helm upgrade webigeo-pre webigeo-back/ --values=webigeo-back/values-pre.yaml -n pre || helm install webigeo-pre webigeo-back/ --values=webigeo-back/values-pre.yaml -n pre
+                    #kubectl apply -f pv.yml,pvc.yml,statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=test --kubeconfig=${KUBECONFIG}
                     """
                 }
             }
@@ -112,7 +148,7 @@ pipeline {
                     def url = "https://api.webigeo.dcpepper.cloudns.ph/"
             
                     def response = sh(script: "curl -s $url", returnStatus: true)
-            
+                    //echo "${responce}"
                     if (response == 0) {
                         echo "HTTP request to $url was successful"
                     } else {
@@ -130,11 +166,41 @@ pipeline {
                         input message: 'Do you want to deploy in production ?', ok: 'Yes'
                     }
                 script { 
-                    sh """kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=prod --kubeconfig=${KUBECONFIG}"""
+                    sh """
+                    #helm upgrade kubweb webigeo/ --values=webigeo/values-prod.yaml -n prod || helm install kubweb1 webigeo/ --values=webigeo/values-prod.yaml -n prod --create-namespace
+                    #kubectl apply -f statefulset-sqlite.yml,service-sqlite.yml,deployment-react.yml,service-react.yml,app-prod-ingress.yml --namespace=prod --kubeconfig=${KUBECONFIG}
+                    """
                 }
             }
         }
 
+        stage('CD Deployment webigeo Front in prod') {
+            steps {
+                script {
+                    //git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
+                    sh """
+                    helm upgrade kubweb1 webigeo-front/ --values=webigeo-front/values-prod.yaml -n prod || helm install kubweb1 webigeo-front/ --values=webigeo-front/values-prod.yaml -n prod --create-namespace
+                    """
+                }
+            }
+        }
+        
+        stage('CD Deployment webigeo Back in prod') {
+            agent {
+                label 'Back_End'
+            }
+            environment {
+                KUBECONFIG = credentials("config1")
+            }
+            steps {
+                script {
+                    //git url: "https://github.com/WEBIGEO-ALTEN/WEBIGEO/", branch: 'master'
+                    sh """
+                    helm upgrade webigeo-prod webigeo-back/ --values=webigeo-back/values-prod.yaml -n prod || helm install webigeo-prod webigeo-back/ --values=webigeo-back/values-prod.yaml -n prod
+                    """
+                }
+            }
+        }
     }
 }
 
