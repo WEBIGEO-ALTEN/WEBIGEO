@@ -147,21 +147,18 @@ pipeline {
                 script {
                     def url = "https://webigeo-pre.dcpepper.cloudns.ph/home"
             
-                    def response = ""
-                        try {
-                        // Execute the curl command and capture its output
-                        response = sh(script: "curl -s -o /dev/null -w '%{http_code}' $url", returnStatus: true)
-                        } catch (Exception e) {
-                        error "Failed to execute curl command: ${e.getMessage()}"
-                        }
-                    response = response.toInteger()
-
-                    echo "The ouput of the curl command :${responce}"
-
-                    if (response == 200) {
-                        echo "HTTP request to $url was successful"
+                    def response = sh(script: "timeout 30 curl -i $url", returnStatus: true)
+                    echo "${response}"
+                    if (response != 0) {
+                        error "HTTP request to $url failed, check the URL and try again."
                     } else {
-                        error "HTTP request to $url failed with status code $response"
+                        def statusCode = sh(script: "curl -s -o /dev/null -w '%{http_code}' $url", returnStatus: true)
+                        echo"This is the test case : ${statusCode}"    
+                        if (statusCode == 0) {
+                            echo "HTTP request to $url was successful. Status code: $statusCode"
+                        } else {
+                            error "HTTP request to $url failed with status code $statusCode"
+                        }
                     }
                 }    
             }
