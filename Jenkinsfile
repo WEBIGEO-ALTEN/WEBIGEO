@@ -147,7 +147,8 @@ pipeline {
                 script {
                     def url = "https://webigeo-pre.dcpepper.cloudns.ph/home"
             
-                    def response = try {
+                    def response = ""
+                        try {
                         // Execute the curl command and capture its output
                         response = bat(script: "curl -s -o NUL -w %%{http_code} $url", returnStatus: true).trim()
                         } catch (Exception e) {
