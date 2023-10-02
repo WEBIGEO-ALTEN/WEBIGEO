@@ -145,7 +145,7 @@ pipeline {
         stage('Testing Kubernetes services') {
             steps {
                 script {
-                    def url = "https://api.webigeo.dcpepper.cloudns.ph/"
+                    def url = "https://webigeo-pre.dcpepper.cloudns.ph/home"
             
                     def response = sh(script: "curl -s $url", returnStatus: true)
                     echo "${responce}"
