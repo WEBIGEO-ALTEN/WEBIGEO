@@ -200,8 +200,8 @@ pipeline {
                 // Merge the dev branch into main
                 sh 'git merge origin/dev'
                 
-                sh 'git config --global user.name goli-sateesh-6011'
-                sh 'git config --global user.email goli.sateesh@gmail.com'
+                //sh 'git config --global user.name goli-sateesh-6011'
+                //sh 'git config --global user.email goli.sateesh@gmail.com'
                 
                 //sh 'git config credential.helper "store --file=$HOME/.git-credentials"'
 
@@ -243,8 +243,8 @@ pipeline {
                 sh 'git checkout main'
                 
                 // Merge the dev branch into main
-                sh 'git config --global user.name goli-sateesh-6011'
-                sh 'git config --global user.email goli.sateesh@gmail.com'
+                //sh 'git config --global user.name goli-sateesh-6011'
+                //sh 'git config --global user.email goli.sateesh@gmail.com'
                 
                 sh 'git config credential.helper "store --file=$HOME/.git-credentials"'
 
