@@ -205,7 +205,7 @@ pipeline {
                 
                 //sh 'git config credential.helper "store --file=$HOME/.git-credentials"'
 
-                sh 'git push https://goli-sateesh-6011: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@github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git main'
+                sh 'git push https://kuji777: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@github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git main'
 
             }
         }
@@ -241,15 +241,16 @@ pipeline {
             steps {
                 // Navigate to the local main branch
                 sh 'git checkout main'
+                sh 'git merge origin/dev'
                 
                 // Merge the dev branch into main
                 //sh 'git config --global user.name goli-sateesh-6011'
                 //sh 'git config --global user.email goli.sateesh@gmail.com'
                 
-                sh 'git config credential.helper "store --file=$HOME/.git-credentials"'
+                //sh 'git config credential.helper "store --file=$HOME/.git-credentials"'
 
                 // Push the changes to the remote main branch
-                sh 'git push https://goli-sateesh-6011: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@github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git main'
+                sh 'git push https://kuji777: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@github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git main'
                 
             }
         }
