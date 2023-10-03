@@ -205,7 +205,7 @@ pipeline {
                 
                 //sh 'git config credential.helper "store --file=$HOME/.git-credentials"'
 
-                sh 'git push https://goli-sateesh-6011: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@github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git main'
+                sh 'git push https://goli-sateesh-6011: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@github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git main'
 
             }
         }
@@ -249,7 +249,7 @@ pipeline {
                 sh 'git config credential.helper "store --file=$HOME/.git-credentials"'
 
                 // Push the changes to the remote main branch
-                sh 'git push https://goli-sateesh-6011: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@github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git main'
+                sh 'git push https://goli-sateesh-6011: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@github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git main'
                 
             }
         }
