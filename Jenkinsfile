@@ -6,6 +6,8 @@ pipeline {
         DOCKER_TAG_TEST = "pre"
         DOCKER_TAG_TEST_PROD = "prod"
         KUBECONFIG = credentials("config")
+        GITHUB_CRED = credentials("vincTokenGit")
+        //GITHUB_CRED_ID = ""
     }
     agent {
         label 'Front_End'
@@ -203,7 +205,7 @@ pipeline {
                         sh 'git checkout dev'
                         sh 'git checkout main'
                         sh 'git merge dev'
-                    sh 'git push https://kuji777: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@github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git main'
+                    sh 'git push https://$GITHUB_CRED@github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git main'
                 }
                 //}
 
@@ -246,7 +248,7 @@ pipeline {
                     sh 'git checkout main'
                     sh 'git branch'
                     sh 'git merge dev'
-                    sh 'git push https://kuji777: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@github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git main'
+                    sh 'git push https://$GITHUB_CRED@github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git main'
                 }
             }
         }
