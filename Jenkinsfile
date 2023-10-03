@@ -260,7 +260,7 @@ pipeline {
                 script {
                     echo "Branch name is: ${env.BRANCH_NAME}"
                     echo "Triggering another pipeline job"
-                    build job: 'WEBIGEO_BACK_PROD', parameters: [string(name: 'param1', value: "value1")], wait: true
+                    build job: 'WEBIGEO_BACK_PROD', wait: true
                     build job: 'WEBIGEO_FRONT_PROD', parameters: [string(name: 'param1', value: "value1")], wait: true
                 }
             }
