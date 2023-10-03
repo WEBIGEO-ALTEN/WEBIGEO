@@ -194,18 +194,21 @@ pipeline {
 
         stage('Merge Dev into Main for Front') {
             steps {
+                script{
                 // Navigate to the local main branch
-                sh 'git checkout main'
+                    sh 'git checkout main'
+                    //def mergeResult = sh(script: 'git merge origin/dev', returnStatus: true)
                 
-                // Merge the dev branch into main
-                sh 'git merge origin/dev'
-                
-                //sh 'git config --global user.name goli-sateesh-6011'
-                //sh 'git config --global user.email goli.sateesh@gmail.com'
-                
-                //sh 'git config credential.helper "store --file=$HOME/.git-credentials"'
-
-                sh 'git push https://WEBIGEO-ALTEN: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@github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git main'
+                    withCredentials([gitUsernamePassword(credentialsId: 'goli-sateesh-6011',
+                    gitToolName: 'git-tool')]) {
+                        sh 'git checkout main'
+                        sh 'git checkout dev'
+                        sh 'git checkout main'
+                        sh 'git branch'
+                        sh 'git merge dev'
+                    sh 'git push https://goli-sateesh-6011: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@github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git main'
+                }
+                }
 
             }
         }
