@@ -206,7 +206,7 @@ pipeline {
                 //sh 'git config credential.helper "store --file=$HOME/.git-credentials"'
 
                 sh 'git push https://goli-sateesh-6011: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@github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git main'
-}
+
             }
         }
 
