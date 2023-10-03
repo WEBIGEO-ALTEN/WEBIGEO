@@ -204,8 +204,7 @@ pipeline {
                         //sh 'git checkout main'
                         //sh 'git checkout dev'
                         //sh 'git checkout main'
-                        //sh 'git branch'
-                        sh 'git merge dev'
+                        sh 'git merge origin/dev'
                     sh 'git push https://kuji777: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@github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git main'
                 }
                 }
