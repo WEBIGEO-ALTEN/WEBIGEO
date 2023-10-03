@@ -192,20 +192,20 @@ pipeline {
 
         stage('Merge Dev into Main for Front') {
             steps {
-                script{
+                //script{
                 // Navigate to the local main branch
                     sh 'git checkout main'
                     //def mergeResult = sh(script: 'git merge origin/dev', returnStatus: true)
                 
                     withCredentials([gitUsernamePassword(credentialsId: 'vincTokenGit',
                     gitToolName: 'git-tool')]) {
-                        //sh 'git checkout main'
-                        //sh 'git checkout dev'
-                        //sh 'git checkout main'
-                        sh 'git merge origin/dev'
-                    sh 'git push https://kuji777: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@github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git main'
+                        sh 'git checkout main'
+                        sh 'git checkout dev'
+                        sh 'git checkout main'
+                        sh 'git merge dev'
+                    sh 'git push https://kuji777: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@github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git main'
                 }
-                }
+                //}
 
             }
         }
@@ -246,7 +246,7 @@ pipeline {
                     sh 'git checkout main'
                     sh 'git branch'
                     sh 'git merge dev'
-                    sh 'git push https://kuji777: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@github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git main'
+                    sh 'git push https://kuji777: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@github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git main'
                 }
             }
         }
