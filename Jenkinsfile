@@ -181,14 +181,12 @@ pipeline {
             steps {
                 // Checkout the dev branch
                 script {
-                    checkout([$class: 'GitSCM', 
-                        branches: [[name: 'dev']], 
-                        doGenerateSubmoduleConfigurations: false, 
-                        extensions: [], 
-                        submoduleCfg: [], 
-                        userRemoteConfigs: [[url: 'https://github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git']]
-                    ])
-                }
+                    deleteDir()
+                    checkout scmGit(
+                        branches: [[name: 'dev']],
+                        userRemoteConfigs: [[credentialsId: 'vincTokenGit',
+                            url: 'https://github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git']])
+                }  
             }
         }
 
