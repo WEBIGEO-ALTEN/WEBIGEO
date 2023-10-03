@@ -12,7 +12,7 @@ pipeline {
     }
 
     stages {
-        stage('Clean Up the kubernetes namespace pre & prod') {
+        stage('Clean Up the kubernetes namespace pre & prod in Front end') {
             steps {
                 script {
                     sh """
@@ -23,7 +23,7 @@ pipeline {
             }
         }
 
-        stage('Clean Up the kubernetes namespace prod') {
+        stage('Clean Up the kubernetes namespace e & prod in Back end') {
             agent {
                 label 'Back_End'
             }
@@ -199,14 +199,14 @@ pipeline {
                     sh 'git checkout main'
                     //def mergeResult = sh(script: 'git merge origin/dev', returnStatus: true)
                 
-                    withCredentials([gitUsernamePassword(credentialsId: 'goli-sateesh-6011',
+                    withCredentials([gitUsernamePassword(credentialsId: 'vincTokenGit',
                     gitToolName: 'git-tool')]) {
-                        sh 'git checkout main'
-                        sh 'git checkout dev'
-                        sh 'git checkout main'
-                        sh 'git branch'
+                        //sh 'git checkout main'
+                        //sh 'git checkout dev'
+                        //sh 'git checkout main'
+                        //sh 'git branch'
                         sh 'git merge dev'
-                    sh 'git push https://goli-sateesh-6011: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@github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git main'
+                    sh 'git push https://kuji777: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@github.com/WEBIGEO-ALTEN/WEBIGEO_FRONT.git main'
                 }
                 }
 
@@ -223,14 +223,14 @@ pipeline {
             steps {
                 // Checkout the dev branch
                 script {
-                    checkout([$class: 'GitSCM', 
-                        branches: [[name: 'dev']], 
-                        doGenerateSubmoduleConfigurations: false, 
-                        extensions: [], 
-                        submoduleCfg: [], 
-                        userRemoteConfigs: [[url: 'https://github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git']]
-                    ])
+                    deleteDir()
+                    checkout scmGit(
+                        branches: [[name: 'dev']],
+                        userRemoteConfigs: [[credentialsId: 'vincTokenGit',
+                            url: 'https://github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git']])
                 }
+                
+                sh 'git branch
             }
         }
 
@@ -243,18 +243,15 @@ pipeline {
             }
             steps {
                 // Navigate to the local main branch
-                sh 'git checkout main'
-                sh 'git merge origin/dev'
-                
-                // Merge the dev branch into main
-                //sh 'git config --global user.name goli-sateesh-6011'
-                //sh 'git config --global user.email goli.sateesh@gmail.com'
-                
-                //sh 'git config credential.helper "store --file=$HOME/.git-credentials"'
-
-                // Push the changes to the remote main branch
-                sh 'git push https://WEBIGEO-ALTEN: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@github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git main'
-                
+                withCredentials([gitUsernamePassword(credentialsId: 'vincTokenGit',
+                 gitToolName: 'git-tool')]) {
+                    sh 'git checkout main'
+                    sh 'git checkout dev'
+                    sh 'git checkout main'
+                    sh 'git branch'
+                    sh 'git merge dev'
+                    sh 'git push https://kuji777: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@github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git main'
+                }
             }
         }
 
