@@ -14,18 +14,17 @@ pipeline {
     }
 
     stages {
-        stage('Clean Up the kubernetes namespace pre & prod in Front end') {
+        stage('Clean Up the kubernetes namespace pre in Front end') {
             steps {
                 script {
                     sh """
                     kubectl delete all --all -n pre
-                    kubectl delete all --all -n prod
                     """
                 }
             }
         }
 
-        stage('Clean Up the kubernetes namespace e & prod in Back end') {
+        stage('Clean Up the kubernetes namespace pre in Back end') {
             agent {
                 label 'Back_End'
             }
@@ -36,7 +35,6 @@ pipeline {
                 script {
                     sh """
                     kubectl delete all --all -n pre
-                    kubectl delete all --all -n prod
                     """
                 }
             }
@@ -249,6 +247,32 @@ pipeline {
                     sh 'git branch'
                     sh 'git merge dev'
                     sh 'git push https://$GITHUB_CRED@github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git main'
+                }
+            }
+        }
+
+        stage('Clean Up the kubernetes namespace prod in Front end') {
+            steps {
+                script {
+                    sh """
+                    kubectl delete all --all -n prod
+                    """
+                }
+            }
+        }
+
+        stage('Clean Up the kubernetes namespace prod in Back end') {
+            agent {
+                label 'Back_End'
+            }
+            environment {
+                KUBECONFIG = credentials("config1")
+            }
+            steps {
+                script {
+                    sh """
+                    kubectl delete all --all -n prod
+                    """
                 }
             }
         }
