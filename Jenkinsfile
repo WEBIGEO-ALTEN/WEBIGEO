@@ -228,9 +228,8 @@ pipeline {
                         branches: [[name: 'dev']],
                         userRemoteConfigs: [[credentialsId: 'vincTokenGit',
                             url: 'https://github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git']])
-                }
-                
-                sh 'git branch
+                }                
+                sh 'git branch'
             }
         }
 
