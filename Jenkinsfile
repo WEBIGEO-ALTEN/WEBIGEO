@@ -205,8 +205,11 @@ pipeline {
                 
                 sh 'git config credential.helper "store --file=$HOME/.git-credentials"'
 
-                // Push the changes to the remote main branch
-                sh 'git push https://goli-sateesh-6011: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@github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git main'
+                withCredentials([string(credentialsId: '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', variable: 'GITHUB_PAT')]) {
+                sh """
+                git push https://goli-sateesh-6011:$GITHUB_PAT@github.com/WEBIGEO-ALTEN/WEBIGEO_BACK.git main
+                """
+}
             }
         }
 
